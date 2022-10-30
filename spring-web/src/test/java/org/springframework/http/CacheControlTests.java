@@ -44,7 +44,7 @@ public class CacheControlTests {
 	@Test
 	public void maxAge_duration() throws Exception {
 		CacheControl cc = CacheControl.maxAge(Duration.ofHours(1));
-		System.out.println("Test......");
+		System.out.println("Test maxAge_duration......");
 		assertThat(cc.getHeaderValue()).isEqualTo("max-age=3600");
 	}
 
