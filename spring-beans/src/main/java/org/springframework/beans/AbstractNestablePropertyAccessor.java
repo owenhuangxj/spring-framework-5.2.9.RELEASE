@@ -46,14 +46,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
- * infrastructure for all typical use cases.
+ * A basic {@link ConfigurablePropertyAccessor} that provides the necessary infrastructure for all typical use cases.
  *
- * <p>This accessor will convert collection and array values to the corresponding
- * target collections or arrays, if necessary. Custom property editors that deal
- * with collections or arrays can either be written via PropertyEditor's
- * {@code setValue}, or against a comma-delimited String via {@code setAsText},
- * as String arrays are converted in such a format if the array itself is not
+ * This accessor will convert collection and array values to the corresponding target collections or arrays, if necessary.
+ * Custom property editors that deal with collections or arrays can either be written via PropertyEditor's
+ * {@code setValue}, or against a comma-delimited String via {@code setAsText}, as String arrays are converted
+ * in such a format if the array itself is not
  * assignable.
  *
  * @author Juergen Hoeller
@@ -175,8 +173,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	/**
-	 * Switch the target object, replacing the cached introspection results only
-	 * if the class of the new object is different to that of the replaced object.
+	 * Switch the target object, replacing the cached introspection results only if the class of the new object is
+	 * different to that of the replaced object.
 	 * @param object the new target object
 	 */
 	public void setWrappedInstance(Object object) {

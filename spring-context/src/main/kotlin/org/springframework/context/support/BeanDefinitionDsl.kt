@@ -76,9 +76,10 @@ fun beans(init: BeanDefinitionDsl.() -> Unit) = BeanDefinitionDsl(init)
  * @author Sebastien Deleuze
  * @since 5.0
  */
-open class BeanDefinitionDsl internal constructor (private val init: BeanDefinitionDsl.() -> Unit,
-							 private val condition: (ConfigurableEnvironment) -> Boolean = { true })
-	: ApplicationContextInitializer<GenericApplicationContext> {
+open class BeanDefinitionDsl internal constructor(
+	private val init: BeanDefinitionDsl.() -> Unit,
+	private val condition: (ConfigurableEnvironment) -> Boolean = { true }
+) : ApplicationContextInitializer<GenericApplicationContext> {
 
 	@PublishedApi
 	internal val children = arrayListOf<BeanDefinitionDsl>()
@@ -93,7 +94,7 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * Shortcut for `context.environment`
 	 * @since 5.1
 	 */
-	val env : ConfigurableEnvironment
+	val env: ConfigurableEnvironment
 		get() = context.environment
 
 	/**
@@ -167,15 +168,17 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see GenericApplicationContext.registerBean
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 */
-	inline fun <reified T : Any> bean(name: String? = null,
-									  scope: Scope? = null,
-									  isLazyInit: Boolean? = null,
-									  isPrimary: Boolean? = null,
-									  isAutowireCandidate: Boolean? = null,
-									  initMethodName: String? = null,
-									  destroyMethodName: String? = null,
-									  description: String? = null,
-									  role: Role? = null) {
+	inline fun <reified T : Any> bean(
+		name: String? = null,
+		scope: Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: Role? = null
+	) {
 
 		val customizer = BeanDefinitionCustomizer { bd ->
 			scope?.let { bd.scope = scope.name.toLowerCase() }
@@ -185,7 +188,7 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 			initMethodName?.let { bd.initMethodName = initMethodName }
 			destroyMethodName?.let { bd.destroyMethodName = destroyMethodName }
 			description?.let { bd.description = description }
-			role?. let { bd.role = role.ordinal }
+			role?.let { bd.role = role.ordinal }
 		}
 
 		val beanName = name ?: BeanDefinitionReaderUtils.uniqueBeanName(T::class.java.name, context);
@@ -209,16 +212,18 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see GenericApplicationContext.registerBean
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 */
-	inline fun <reified T : Any> bean(name: String? = null,
-									  scope: Scope? = null,
-									  isLazyInit: Boolean? = null,
-									  isPrimary: Boolean? = null,
-									  isAutowireCandidate: Boolean? = null,
-									  initMethodName: String? = null,
-									  destroyMethodName: String? = null,
-									  description: String? = null,
-									  role: Role? = null,
-									  crossinline function: BeanSupplierContext.() -> T) {
+	inline fun <reified T : Any> bean(
+		name: String? = null,
+		scope: Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: Role? = null,
+		crossinline function: BeanSupplierContext.() -> T
+	) {
 
 		val customizer = BeanDefinitionCustomizer { bd ->
 			scope?.let { bd.scope = scope.name.toLowerCase() }
@@ -228,12 +233,17 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 			initMethodName?.let { bd.initMethodName = initMethodName }
 			destroyMethodName?.let { bd.destroyMethodName = destroyMethodName }
 			description?.let { bd.description = description }
-			role?. let { bd.role = role.ordinal }
+			role?.let { bd.role = role.ordinal }
 		}
 
 
 		val beanName = name ?: BeanDefinitionReaderUtils.uniqueBeanName(T::class.java.name, context);
-		context.registerBean(beanName, T::class.java, Supplier { function.invoke(BeanSupplierContext(context)) }, customizer)
+		context.registerBean(
+			beanName,
+			T::class.java,
+			Supplier { function.invoke(BeanSupplierContext(context)) },
+			customizer
+		)
 	}
 
 	/**
@@ -255,19 +265,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2.3
 	 */
-	inline fun <reified T: Any>
-			bean(crossinline f: () -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any>
+			bean(
+		crossinline f: () -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke()
 		}
 	}
@@ -291,19 +313,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any>
-			bean(crossinline f: (A) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any>
+			bean(
+		crossinline f: (A) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref())
 		}
 	}
@@ -327,19 +361,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any>
-			bean(crossinline f: (A, B) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any>
+			bean(
+		crossinline f: (A, B) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref())
 		}
 	}
@@ -363,19 +409,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any>
-			bean(crossinline f: (A, B, C) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any>
+			bean(
+		crossinline f: (A, B, C) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref())
 		}
 	}
@@ -399,19 +457,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any>
-			bean(crossinline f: (A, B, C, D) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any>
+			bean(
+		crossinline f: (A, B, C, D) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref())
 		}
 	}
@@ -435,19 +505,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any>
-			bean(crossinline f: (A, B, C, D, E) -> T,
-				 name: String? = null,
-								   scope: BeanDefinitionDsl.Scope? = null,
-								   isLazyInit: Boolean? = null,
-								   isPrimary: Boolean? = null,
-								   isAutowireCandidate: Boolean? = null,
-								   initMethodName: String? = null,
-								   destroyMethodName: String? = null,
-								   description: String? = null,
-								   role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any>
+			bean(
+		crossinline f: (A, B, C, D, E) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -471,19 +553,31 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any>
-			bean(crossinline f: (A, B, C, D, E, F) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -507,20 +601,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -544,20 +650,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -581,20 +699,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -618,20 +748,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -655,20 +797,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -692,20 +846,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -729,20 +895,32 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -766,21 +944,33 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
 			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
 		}
 	}
@@ -804,22 +994,50 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -842,22 +1060,51 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -880,22 +1127,52 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -918,22 +1195,53 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any, reified R: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any, reified R : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -956,22 +1264,54 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any, reified R: Any, reified S: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any, reified R : Any, reified S : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -994,22 +1334,55 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any, reified R: Any, reified S: Any, reified U: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any, reified R : Any, reified S : Any, reified U : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -1032,23 +1405,57 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any, reified R: Any, reified S: Any, reified U: Any,
-			reified V: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U, V) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any, reified R : Any, reified S : Any, reified U : Any,
+			reified V : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U, V) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -1071,23 +1478,58 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @see org.springframework.beans.factory.config.BeanDefinition
 	 * @since 5.2
 	 */
-	inline fun <reified T: Any, reified A: Any, reified B: Any, reified C: Any, reified D: Any, reified E: Any, reified F: Any,
-			reified G: Any, reified H: Any, reified I: Any, reified J: Any, reified K: Any, reified L: Any, reified M: Any,
-			reified N: Any, reified O: Any, reified P: Any, reified Q: Any, reified R: Any, reified S: Any, reified U: Any,
-			reified V: Any, reified W: Any>
-			bean(crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U, V, W) -> T,
-				 name: String? = null,
-				 scope: BeanDefinitionDsl.Scope? = null,
-				 isLazyInit: Boolean? = null,
-				 isPrimary: Boolean? = null,
-				 isAutowireCandidate: Boolean? = null,
-				 initMethodName: String? = null,
-				 destroyMethodName: String? = null,
-				 description: String? = null,
-				 role: BeanDefinitionDsl.Role? = null) {
+	inline fun <reified T : Any, reified A : Any, reified B : Any, reified C : Any, reified D : Any, reified E : Any, reified F : Any,
+			reified G : Any, reified H : Any, reified I : Any, reified J : Any, reified K : Any, reified L : Any, reified M : Any,
+			reified N : Any, reified O : Any, reified P : Any, reified Q : Any, reified R : Any, reified S : Any, reified U : Any,
+			reified V : Any, reified W : Any>
+			bean(
+		crossinline f: (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, U, V, W) -> T,
+		name: String? = null,
+		scope: BeanDefinitionDsl.Scope? = null,
+		isLazyInit: Boolean? = null,
+		isPrimary: Boolean? = null,
+		isAutowireCandidate: Boolean? = null,
+		initMethodName: String? = null,
+		destroyMethodName: String? = null,
+		description: String? = null,
+		role: BeanDefinitionDsl.Role? = null
+	) {
 
-		bean(name, scope, isLazyInit, isPrimary, isAutowireCandidate, initMethodName, destroyMethodName, description, role) {
-			f.invoke(ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref(), ref())
+		bean(
+			name,
+			scope,
+			isLazyInit,
+			isPrimary,
+			isAutowireCandidate,
+			initMethodName,
+			destroyMethodName,
+			description,
+			role
+		) {
+			f.invoke(
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref(),
+				ref()
+			)
 		}
 	}
 
@@ -1104,7 +1546,7 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 		 * @param name the name of the bean to retrieve
 		 * @param T type the bean must match, can be an interface or superclass
 		 */
-		inline fun <reified T : Any> ref(name: String? = null) : T = when (name) {
+		inline fun <reified T : Any> ref(name: String? = null): T = when (name) {
 			null -> context.getBean(T::class.java)
 			else -> context.getBean(name, T::class.java)
 		}
@@ -1114,7 +1556,7 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 		 * of instances, including availability and uniqueness options.
 		 * @see org.springframework.beans.factory.BeanFactory.getBeanProvider
 		 */
-		inline fun <reified T : Any> provider() : ObjectProvider<T> = context.getBeanProvider()
+		inline fun <reified T : Any> provider(): ObjectProvider<T> = context.getBeanProvider()
 
 	}
 
@@ -1134,8 +1576,10 @@ open class BeanDefinitionDsl internal constructor (private val init: BeanDefinit
 	 * @param condition the predicate to fulfill in order to take in account the inner
 	 * bean definition block
 	 */
-	fun environment(condition: ConfigurableEnvironment.() -> Boolean,
-					init: BeanDefinitionDsl.() -> Unit) {
+	fun environment(
+		condition: ConfigurableEnvironment.() -> Boolean,
+		init: BeanDefinitionDsl.() -> Unit
+	) {
 		val beans = BeanDefinitionDsl(init, condition::invoke)
 		children.add(beans)
 	}

@@ -33,31 +33,33 @@ import org.springframework.util.ResourceUtils;
  * context's resource loading strategy.
  *
  * @author Juergen Hoeller
- * @since 10.03.2004
  * @see Resource
  * @see org.springframework.core.io.support.ResourcePatternResolver
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
+ * @since 10.03.2004
  */
 public interface ResourceLoader {
 
-	/** Pseudo URL prefix for loading from the class path: "classpath:". */
+	/**
+	 * Pseudo URL prefix for loading from the class path: "classpath:". 从类路径加载的伪URL前缀:" classpath:"。
+	 */
 	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;
 
 
 	/**
 	 * Return a Resource handle for the specified resource location.
-	 * <p>The handle should always be a reusable resource descriptor,
-	 * allowing for multiple {@link Resource#getInputStream()} calls.
+	 * <p>The handle should always be a reusable resource descriptor, allowing for multiple
+	 * {@link Resource#getInputStream()} calls.句柄应该始终是一个可重用的资源描述符，允许多个{@link Resource#getInputStream()}调用。
 	 * <p><ul>
 	 * <li>Must support fully qualified URLs, e.g. "file:C:/test.dat".
 	 * <li>Must support classpath pseudo-URLs, e.g. "classpath:test.dat".
 	 * <li>Should support relative file paths, e.g. "WEB-INF/test.dat".
-	 * (This will be implementation-specific, typically provided by an
-	 * ApplicationContext implementation.)
+	 * (This will be implementation-specific, typically provided by an ApplicationContext implementation.)
 	 * </ul>
-	 * <p>Note that a Resource handle does not imply an existing resource;
-	 * you need to invoke {@link Resource#exists} to check for existence.
+	 * <p>Note that a Resource handle does not imply an existing resource; you need to invoke {@link Resource#exists}
+	 * to check for existence. 注意，Resource句柄并不意味着现有资源;你需要调用{@link Resource#exists}来检查是否存在。
+	 *
 	 * @param location the resource location
 	 * @return a corresponding Resource handle (never {@code null})
 	 * @see #CLASSPATH_URL_PREFIX
@@ -68,9 +70,10 @@ public interface ResourceLoader {
 
 	/**
 	 * Expose the ClassLoader used by this ResourceLoader.
-	 * <p>Clients which need to access the ClassLoader directly can do so
-	 * in a uniform manner with the ResourceLoader, rather than relying
-	 * on the thread context ClassLoader.
+	 * <p>Clients which need to access the ClassLoader directly can do so in a uniform manner with the ResourceLoader,
+	 * rather than relying on the thread context ClassLoader. 需要直接访问ClassLoader的客户端可以使用ResourceLoader
+	 * 以统一的方式访问，而不是依赖于线程上下文ClassLoader。
+	 *
 	 * @return the ClassLoader
 	 * (only {@code null} if even the system ClassLoader isn't accessible)
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()

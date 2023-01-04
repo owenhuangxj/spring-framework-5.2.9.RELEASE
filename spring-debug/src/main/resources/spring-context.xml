@@ -7,6 +7,19 @@
 		<property name="id" value="10000"/>
 		<property name="name" value="Owen"/>
 		<property name="age" value="100"/>
+		<property name="teachers" >
+			<set>
+				<ref bean="teacher"/>
+			</set>
+		</property>
 	</bean>
 
+	<bean id="teacher" class="com.owen.entity.Teacher">
+		<property name="id" value="10001"/>
+		<property name="name" value="mashibing"/>
+		<property name="age" value="100"/>
+	</bean>
+
+	<bean id="myBeanFactoryPostProcessor" class="com.owen.processors.MyBeanFactoryPostProcessor"/>
+	<bean id="myBeanDefinitionRegistryPostProcessor" class="com.owen.processors.MyBeanDefinitionRegistryPostProcessor"/>
 </beans>

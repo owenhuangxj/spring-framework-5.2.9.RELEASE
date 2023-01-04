@@ -30,13 +30,15 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
  * @since 3.0.1
  * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
  */
-public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor {
+public interface  BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor {
 
 	/**
 	 * Modify the application context's internal bean definition registry after its
 	 * standard initialization. All regular bean definitions will have been loaded,
 	 * but no beans will have been instantiated yet. This allows for adding further
 	 * bean definitions before the next post-processing phase kicks in.
+	 * 在IOC容器中的内部bean definition标准初始化之后修改这些内部的bean definition。此时，所有的
+	 * 常规bean definition 将被加载但是还没有被初始化。此时在下一步的预置处理阶段之前允许进一步添加bean definition
 	 * @param registry the bean definition registry used by the application context
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */

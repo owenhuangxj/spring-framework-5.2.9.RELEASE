@@ -351,14 +351,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the {@code Environment} for this application context in configurable
-	 * form, allowing for further customization.
-	 * <p>If none specified, a default environment will be initialized via
-	 * {@link #createEnvironment()}.
+	 * Return the {@code Environment} for this application context in configurable form, allowing for further
+	 * customization. 以可配置的形式返回此应用程序上下文的{@code Environment}，允许进一步自定义。 customize 可自定义
+	 * <p>If none specified, a default environment will be initialized via {@link #createEnvironment()}.
 	 */
 	@Override
 	public ConfigurableEnvironment getEnvironment() {
 		if (this.environment == null) {
+			// 如果没有自定义就创建一个默认的：StandardEnvironment
 			this.environment = createEnvironment();
 		}
 		return this.environment;
@@ -366,8 +366,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Create and return a new {@link StandardEnvironment}.
-	 * <p>Subclasses may override this method in order to supply
-	 * a custom {@link ConfigurableEnvironment} implementation.
+	 * <p>Subclasses may override this method in order to supply a custom {@link ConfigurableEnvironment}
+	 * implementation.
 	 */
 	protected ConfigurableEnvironment createEnvironment() {
 		return new StandardEnvironment();
@@ -488,15 +488,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the ResourcePatternResolver to use for resolving location patterns
-	 * into Resource instances. Default is a
-	 * {@link org.springframework.core.io.support.PathMatchingResourcePatternResolver},
-	 * supporting Ant-style location patterns.
-	 * <p>Can be overridden in subclasses, for extended resolution strategies,
-	 * for example in a web environment.
+	 * Return the ResourcePatternResolver to use for resolving location patterns into Resource instances. Default is a
+	 * {@link org.springframework.core.io.support.PathMatchingResourcePatternResolver},supporting Ant-style location
+	 * patterns.
+	 * <p>Can be overridden in subclasses, for extended resolution strategies, for example in a web environment.
 	 * <p><b>Do not call this when needing to resolve a location pattern.</b>
-	 * Call the context's {@code getResources} method instead, which
-	 * will delegate to the ResourcePatternResolver.
+	 * Call the context's {@code getResources} method instead, which will delegate to the ResourcePatternResolver.
 	 *
 	 * @return the ResourcePatternResolver for this context
 	 * @see #getResources
@@ -586,8 +583,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				/**
 				 * Allows post-processing of the bean factory in context subclasses.
 				 * Springboot工程:
-				 * 先调用org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext#postProcessBeanFactory
-				 * 再调用 org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext#postProcessBeanFactory
+				 * 先调用org.springframework.boot.web.servlet.context
+				 * .AnnotationConfigServletWebServerApplicationContext#postProcessBeanFactory
+				 * 再调用 org.springframework.boot.web.servlet.context
+				 * .ServletWebServerApplicationContext#postProcessBeanFactory
 				 */
 				postProcessBeanFactory(beanFactory);
 
@@ -630,14 +629,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				/**
 				 * Instantiate all remaining (non-lazy-init) singletons.初始化剩下的（非懒初始化）的单例对象
-				 * Finish the initialization of this context's bean factory, initializing all remaining singleton beans.
+				 * Finish the initialization of this context's bean factory, initializing all remaining singleton
+				 * beans.
 				 * 完成容器中bean工厂的初始化，初始化剩下的的单例对象
 				 */
 				finishBeanFactoryInitialization(beanFactory);
 
 				/**
 				 * Last step: publish corresponding event.最后一步：发布相应的事件
-				 * Finish the refresh of this context, invoking the LifecycleProcessor's onRefresh() method and publishing the ContextRefreshedEvent.
+				 * Finish the refresh of this context, invoking the LifecycleProcessor's onRefresh() method and
+				 * publishing the ContextRefreshedEvent.
 				 * 完成IOC容器的刷新，调用LifecycleProcessor的onRefresh方法然后发布容器刷新事件
 				 */
 				finishRefresh();
@@ -660,7 +661,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				throw ex;
 			} finally {
 				/**
-				 * Reset common introspection caches in Spring's core, since we might not ever need metadata for singleton beans anymore.
+				 * Reset common introspection caches in Spring's core, since we might not ever need metadata for
+				 * singleton beans anymore.
 				 * 重置Spring核心中的公共自省缓存，因为我们可能再也不需要单例bean的元数据了
 				 */
 				resetCommonCaches();
@@ -690,16 +692,19 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		/**
 		 * Initialize any placeholder property sources in the context environment.初始化应用上下文环境中的所有占位符
 		 * 实际调用org.springframework.web.context.support.GenericWebApplicationContext#initPropertySources,
-		 * -->> org.springframework.web.context.support.StandardServletEnvironment#initPropertySources(ServletContext, ServletConfig)
+		 * -->> org.springframework.web.context.support.StandardServletEnvironment#initPropertySources(ServletContext,
+		 * ServletConfig)
 		 * -->> org.springframework.web.context.support.WebApplicationContextUtils
-		 * #initServletPropertySources(MutablePropertySources, javax.servlet.ServletContext, javax.servlet.ServletConfig)
+		 * #initServletPropertySources(MutablePropertySources, javax.servlet.ServletContext, javax.servlet
+		 * .ServletConfig)
 		 * 将基于servlet的存根属性源替换为使用给定servletContext和servletConfig对象填充的实际实例。
 		 * 如果servletContext和servletConfig均为空则initPropertySources不做任何事情
 		 */
 		initPropertySources();
 
 		/**
-		 * Validate that all properties marked as required are resolvable:see ConfigurablePropertyResolver#setRequiredProperties
+		 * Validate that all properties marked as required are resolvable:see
+		 * ConfigurablePropertyResolver#setRequiredProperties
 		 * ConfigurableEnvironment继承自ConfigurablePropertyResolver，通过
 		 * ConfigurableApplicationContext applicationContext = springApplication.run(args);
 		 * applicationContext.getEnvironment().setRequiredProperties("foo","bar");
@@ -1387,7 +1392,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	@Override
-	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
+	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons,
+										boolean allowEagerInit) {
 		assertBeanFactoryActive();
 		return getBeanFactory().getBeanNamesForType(type, includeNonSingletons, allowEagerInit);
 	}
@@ -1399,7 +1405,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	@Override
-	public <T> Map<String, T> getBeansOfType(@Nullable Class<T> type, boolean includeNonSingletons, boolean allowEagerInit)
+	public <T> Map<String, T> getBeansOfType(@Nullable Class<T> type, boolean includeNonSingletons,
+											 boolean allowEagerInit)
 			throws BeansException {
 
 		assertBeanFactoryActive();

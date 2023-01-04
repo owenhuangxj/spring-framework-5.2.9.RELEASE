@@ -19,13 +19,12 @@ package org.springframework.beans.factory.config;
 import org.springframework.beans.BeansException;
 
 /**
- * Factory hook that allows for custom modification of an application context's
- * bean definitions, adapting the bean property values of the context's underlying
- * bean factory.
+ * Factory hook that allows for custom modification of an application context's bean definitions,adapting the bean
+ * property values of the context's underlying bean factory.
+ * 工厂钩子，允许对应用程序上下文的bean definition进行自定义修改，调整上下文基础bean工厂的bean属性值。
  *
- * <p>Useful for custom config files targeted at system administrators that
- * override bean properties configured in the application context. See
- * {@link PropertyResourceConfigurer} and its concrete implementations for
+ * <p>Useful for custom config files targeted at system administrators that override bean properties configured in
+ * the application context. See {@link PropertyResourceConfigurer} and its concrete implementations for
  * out-of-the-box solutions that address such configuration needs.
  *
  * <p>A {@code BeanFactoryPostProcessor} may interact with and modify bean
@@ -55,18 +54,18 @@ import org.springframework.beans.BeansException;
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
- * @since 06.07.2003
  * @see BeanPostProcessor
  * @see PropertyResourceConfigurer
+ * @since 06.07.2003
  */
 @FunctionalInterface
 public interface BeanFactoryPostProcessor {
 
 	/**
-	 * Modify the application context's internal bean factory after its standard
-	 * initialization. All bean definitions will have been loaded, but no beans
-	 * will have been instantiated yet. This allows for overriding or adding
+	 * Modify the application context's internal bean factory after its standard initialization. All bean definitions
+	 * will have been loaded, but no beans will have been instantiated yet. This allows for overriding or adding
 	 * properties even to eager-initializing beans.
+	 *
 	 * @param beanFactory the bean factory used by the application context
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */

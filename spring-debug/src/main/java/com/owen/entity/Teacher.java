@@ -4,14 +4,12 @@ import java.util.Set;
 
 /**
  * @author OwenHuang
- * @since 2022/12/28 21:49
+ * @since 2023/1/2 21:01
  */
-public class User {
+public class Teacher {
 	private Long id;
 	private String name;
 	private Integer age;
-
-	private Set<Teacher> teachers;
 
 	public Long getId() {
 		return id;
@@ -37,21 +35,12 @@ public class User {
 		this.age = age;
 	}
 
-	public Set<Teacher> getTeachers() {
-		return teachers;
-	}
-
-	public void setTeachers(Set<Teacher> teachers) {
-		this.teachers = teachers;
-	}
-
 	@Override
 	public String toString() {
-		return "User{" +
+		return "Teacher{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", age=" + age +
-				", teachers=" + teachers +
 				'}';
 	}
 }

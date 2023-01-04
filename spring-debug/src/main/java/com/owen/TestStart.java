@@ -12,5 +12,10 @@ public class TestStart {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
 		User user = (User) context.getBean("user");
 		System.out.println("user:" + user);
+		System.out.println("=========================");
+		for (String beanDefinitionName : context.getBeanDefinitionNames()) {
+			System.out.println(beanDefinitionName);
+		}
+
 	}
 }
